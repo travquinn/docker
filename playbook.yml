@@ -80,5 +80,4 @@
 
     - name: Run Docker Compose
       command: docker-compose -f /opt/docker/docker-compose.yml up -d
-      environment:
-        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
