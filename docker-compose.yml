@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.5
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  mautic:
+    image: mautic/mautic:latest
+    environment:
+      - MAUTIC_DB_HOST=db
+      - MAUTIC_DB_NAME=mautic
+      - MAUTIC_DB_USER=mautic
+      - MAUTIC_DB_PASSWORD=mauticpassword
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mautic.rule=Host(`mautic.example.com`)"
+    depends_on:
+      - db
+
+  matomo:
+    image: matomo:latest
+    environment:
+      - MATOMO_DATABASE_HOST=db
+      - MATOMO_DATABASE_NAME=matomo
+      - MATOMO_DATABASE_USER=matomo
+      - MATOMO_DATABASE_PASSWORD=matomopassword
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.matomo.rule=Host(`matomo.example.com`)"
+    depends_on:
+      - db
+
+  suitecrm:
+    image: suitecrm/suitecrm:latest
+    environment:
+      - DB_HOST=db
+      - DB_NAME=suitecrm
+      - DB_USER=suitecrm
+      - DB_PASSWORD=suitecrmpassword
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.suitecrm.rule=Host(`suitecrm.example.com`)"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=mautic
+      - MYSQL_USER=mautic
+      - MYSQL_PASSWORD=mauticpassword
+
+networks:
+  default:
+    external:
+      name: traefik_default
