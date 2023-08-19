@@ -5,3 +5,6 @@ cd /opt
 
 # Run ansible-pull to execute the playbook
 ansible-pull -U https://github.com/travquinn/docker/blob/main/playbook.yml playbook.yml
+
+# Make executable
+# chmod +x run-playbook.sh
