@@ -74,7 +74,7 @@
 
     - name: Clone Docker Compose repository
       git:
-        repo: https://github.com/your-github-account/docker.git
+        repo: https://github.com/travquinn/docker/blob/main/docker-compose.yml
         dest: /opt/docker
         version: HEAD
 
