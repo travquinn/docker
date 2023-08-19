@@ -1,0 +1,84 @@
+---
+- name: Setup Docker, Tailscale, and Deploy Docker Compose
+  hosts: your_target_host
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Prompt user for Tailscale auth key and root password
+      vars_prompt:
+        - name: "tailscale_key"
+          prompt: "Enter your Tailscale authentication key: "
+        - name: "root_password"
+          prompt: "Enter the root password for the server: "
+          private: yes
+
+    - name: Install Tailscale
+      become: yes
+      shell: curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.gpg | gpg --dearmor -o /usr/share/keyrings/tailscale-archive-keyring.gpg
+          
+    - name: Add Tailscale repository
+      become: yes
+      copy:
+        content: "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release }} main"
+        dest: /etc/apt/sources.list.d/tailscale.list
+
+    - name: Install Tailscale package
+      apt:
+        name: tailscale
+        state: present
+
+    - name: Authenticate Tailscale using key
+      become: yes
+      shell: tailscale up --authkey {{ tailscale_key }}
+
+    - name: Set root password
+      become: yes
+      user:
+        name: root
+        password: "{{ root_password | password_hash('sha512') }}"
+
+    - name: Clone Docker Compose repository
+      git:
+        repo: https://github.com/your-github-account/docker.git
+        dest: /opt/docker
+        version: HEAD
+
+    - name: Run Docker Compose
+      command: docker-compose -f /opt/docker/docker-compose.yml up -d
+      environment:
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
