@@ -4,4 +4,4 @@
 cd /path/to/ansible/playbook
 
 # Run ansible-pull to execute the playbook
-ansible-pull -U your_git_repository_url playbook.yml
+ansible-pull -U https://github.com/travquinn/docker/blob/main/playbook.yml playbook.yml
