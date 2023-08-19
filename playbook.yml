@@ -1,6 +1,6 @@
 ---
 - name: Setup Docker, Tailscale, and Deploy Docker Compose
-  hosts: your_target_host
+  hosts: localhost
   become: true
 
   tasks:
