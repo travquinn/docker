@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # References
+# https://docs.docker.com/engine/reference/commandline/stop/
+# https://docs.docker.com/engine/reference/commandline/rm/
 # https://docs.docker.com/engine/install/ubuntu/#uninstall-docker-engine
 # https://docs.docker.com/compose/install/uninstall/
 
