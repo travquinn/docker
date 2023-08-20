@@ -2,6 +2,7 @@
 
 # References
 # https://docs.docker.com/engine/install/ubuntu/
+# https://docs.docker.com/engine/install/linux-postinstall/
 
 
 sudo apt-get update
@@ -20,8 +21,13 @@ sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-sudo apt-get update
-sudo apt-get install docker-compose-plugin
+# Post installation setup
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
 
-sudo apt-get update
-sudo apt-get install docker-compose-plugin
+# Define Docker user permissions
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+echo "Done!"
+echo "You should log out, and use the 'docker' user for any Docker administration now."
