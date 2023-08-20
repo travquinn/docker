@@ -4,6 +4,9 @@
 # https://docs.docker.com/engine/install/ubuntu/#uninstall-docker-engine
 # https://docs.docker.com/compose/install/uninstall/
 
+# Stop all containers
+docker stop $(docker ps -a -q)
+
 # Uninstall Docker Engine
 sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
 
