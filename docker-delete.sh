@@ -5,7 +5,7 @@
 # https://docs.docker.com/compose/install/uninstall/
 
 # Stop all containers
-docker stop $(docker ps -a -q)
+sudo docker stop $(docker ps -a -q)
 
 # Uninstall Docker Engine
 sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
@@ -13,6 +13,15 @@ sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin do
 # Remove Docker Compose plugin
 sudo apt-get remove docker-compose-plugin
 
+# Tidy up
+sudo apt autoremove
+
 # Remove any Images, containers, volumes, etc.
 sudo rm -rf /var/lib/docker
 sudo rm -rf /var/lib/containerd
+
+echo
+echo #######################################################
+echo If you received any errors failed, reboot and run again.
+echo #######################################################
+echo
