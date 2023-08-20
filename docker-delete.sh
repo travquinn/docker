@@ -19,9 +19,3 @@ sudo apt autoremove
 # Remove any Images, containers, volumes, etc.
 sudo rm -rf /var/lib/docker
 sudo rm -rf /var/lib/containerd
-
-echo
-echo #######################################################
-echo If you received any errors failed, reboot and run again.
-echo #######################################################
-echo
