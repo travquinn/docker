@@ -29,5 +29,8 @@ sudo systemctl enable containerd.service
 sudo groupadd docker
 sudo usermod -aG docker $USER
 
+# TO DO - Add rootless Docker configuration here
+# https://docs.docker.com/engine/security/rootless/
+
 echo "Done!"
 echo "You should log out, and use the 'docker' user for any Docker administration now."
